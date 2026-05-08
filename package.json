@@ -1,0 +1,29 @@
+{
+  "name": "rate-my-roommate",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "NODE_ENV=development next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postinstall": "prisma generate",
+    "seed": "node prisma/seed.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.1",
+    "next": "^15.3.1",
+    "nodemailer": "^6.9.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "@types/nodemailer": "^6.4.7",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "^19.1.2",
+    "prisma": "^6.8.1",
+    "typescript": "^5.8.3"
+  }
+}

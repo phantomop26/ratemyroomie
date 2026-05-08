@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  displayName  String?
+  nyuVerified  Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  sessions     Session[]
+  profiles     RoommateProfile[] @relation("OwnedProfiles")
+  reviews      Review[]  @relation("AuthorReviews")
+
+  @@index([email])
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  userId     String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+}
+
+model RoommateProfile {
+  id             String   @id @default(cuid())
+  userId         String?  @unique
+  fullName       String
+  dorm           String
+  vibe           String
+  sleepSchedule  String
+  cleanliness    Int
+  communication  Int
+  socialLevel    Int
+  bio            String?
+  tags           Json     @default("[]")
+  averageRating  Float    @default(0)
+  reviewCount    Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User?    @relation("OwnedProfiles", fields: [userId], references: [id], onDelete: Cascade)
+  reviews        Review[]
+
+  @@index([dorm])
+  @@index([userId])
+}
+
+model Review {
+  id            String   @id @default(cuid())
+  profileId     String
+  authorId      String
+  cleanliness   Int
+  communication Int
+  sleep         Int
+  vibeScore     Int
+  comment       String
+  createdAt     DateTime @default(now())
+  profile       RoommateProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  author        User     @relation("AuthorReviews", fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([profileId])
+  @@index([authorId])
+}
+
+model Hall {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  style     String
+  group     String?
+  neighborhood String?
+  notes     String?
+  createdAt DateTime @default(now())
+  @@index([style])
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@index([token])
+}
