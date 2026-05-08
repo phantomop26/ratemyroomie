@@ -12,6 +12,10 @@ function normalizeTags(tags: unknown): string[] {
   return tags.filter((tag): tag is string => typeof tag === 'string');
 }
 
+function getPublicReviewerLabel() {
+  return 'NYU student';
+}
+
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id: profileId } = await params;
 
@@ -114,7 +118,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
                 <article key={review.id} className="review-card" style={{ padding: '1rem', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
                   <div className="card-head">
                     <div>
-                      <h3>{review.author.displayName || review.author.email.split('@')[0]}</h3>
+                      <h3>{getPublicReviewerLabel()}</h3>
                       <p className="muted">{stars(review.vibeScore)}</p>
                     </div>
                   </div>

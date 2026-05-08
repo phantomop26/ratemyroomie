@@ -14,6 +14,10 @@ function normalizeTags(tags: unknown): string[] {
   return tags.filter((tag): tag is string => typeof tag === 'string');
 }
 
+function getPublicReviewerLabel() {
+  return 'NYU student';
+}
+
 export default async function HomePage() {
   const [user, data] = await Promise.all([getSessionUser(), getHomepageData()]);
 
@@ -184,7 +188,7 @@ export default async function HomePage() {
                     <strong>{stars(review.vibeScore)}</strong>
                   </div>
                   <p>{review.comment}</p>
-                  <p className="muted">Posted by {review.author.displayName ?? review.author.email}</p>
+                  <p className="muted">Posted by {getPublicReviewerLabel()}</p>
                 </article>
               ))
             ) : (
