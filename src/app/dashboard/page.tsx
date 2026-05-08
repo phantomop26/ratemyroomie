@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSessionUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { getHalls } from '@/lib/halls';
 
 export default async function DashboardPage() {
   const user = await getSessionUser();
@@ -23,7 +24,7 @@ export default async function DashboardPage() {
         profile: { select: { fullName: true, dorm: true } },
       },
     }),
-    prisma.hall.findMany({ orderBy: { name: 'asc' } }),
+    getHalls(),
   ]);
 
   return (

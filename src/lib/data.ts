@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/db';
+import { getHalls } from '@/lib/halls';
 
 export const getHomepageData = async () => {
   const [profiles, reviews] = await Promise.all([
@@ -34,7 +35,7 @@ export const getHomepageData = async () => {
     }),
   ]);
 
-  const halls = await prisma.hall.findMany({ orderBy: { name: 'asc' } });
+  const halls = await getHalls();
 
   return { profiles, reviews, halls };
 };

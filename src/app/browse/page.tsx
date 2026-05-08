@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
+import { getHalls } from '@/lib/halls';
 
 function stars(value: number) {
   return '★★★★★'.slice(0, value) + '☆☆☆☆☆'.slice(0, 5 - value);
@@ -39,7 +40,7 @@ export default async function BrowsePage({ searchParams }: { searchParams: Promi
       },
       orderBy: [{ averageRating: 'desc' }, { reviewCount: 'desc' }],
     }),
-    prisma.hall.findMany({ orderBy: { name: 'asc' } }),
+    getHalls(),
   ]);
 
   // Filter profiles

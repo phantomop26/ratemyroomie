@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { prisma } from '@/lib/db';
+import { getHalls } from '@/lib/halls';
 
 type JoinSearchParams = {
   error?: string;
@@ -27,7 +27,7 @@ function getJoinErrorMessage(error?: string, smtpMessage?: string) {
 export default async function JoinPage({ searchParams }: { searchParams?: Promise<JoinSearchParams> }) {
   const params = searchParams ? await searchParams : undefined;
   const errorMessage = getJoinErrorMessage(params?.error, params?.smtpMessage);
-  const halls = await prisma.hall.findMany({ orderBy: { name: 'asc' } });
+  const halls = await getHalls();
 
   return (
     <main className="shell">
