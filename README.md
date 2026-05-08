@@ -19,6 +19,12 @@ An NYU-only roommate ratings app with database-backed accounts and reviews.
 
 Set `DATABASE_URL` before running locally or deploying to Vercel.
 
+For email verification, also set:
+
+- `SMTP_URL` for the mail provider connection string
+- `EMAIL_FROM` for the sender address shown in outgoing verification emails
+- `ALLOW_ANY_EMAIL=true` only for local testing outside the NYU domain
+
 ## Run locally
 
 ```bash
