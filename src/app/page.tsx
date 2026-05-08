@@ -2,6 +2,9 @@ import Link from 'next/link';
 import { getSessionUser } from '@/lib/auth';
 import { getHomepageData } from '@/lib/data';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 function stars(value: number) {
   return '★★★★★'.slice(0, value) + '☆☆☆☆☆'.slice(0, 5 - value);
 }

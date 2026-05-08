@@ -36,7 +36,7 @@ export default function PostReviewPage() {
 
   useEffect(() => {
     async function loadHalls() {
-      const res = await fetch('/api/halls');
+      const res = await fetch('/api/halls', { cache: 'no-store' });
       const data = await res.json();
       setHalls(data);
     }

@@ -2,6 +2,9 @@ import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import { getHalls } from '@/lib/halls';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 function stars(value: number) {
   return '★★★★★'.slice(0, value) + '☆☆☆☆☆'.slice(0, 5 - value);
 }
