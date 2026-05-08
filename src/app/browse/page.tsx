@@ -11,6 +11,11 @@ interface SearchParams {
   search?: string;
 }
 
+function normalizeTags(tags: unknown): string[] {
+  if (!Array.isArray(tags)) return [];
+  return tags.filter((tag): tag is string => typeof tag === 'string');
+}
+
 const VIBES = ['Night Owl', 'Early Bird', 'Party', 'Chill', 'Study Focused', 'Social Butterfly'];
 
 export default async function BrowsePage({ searchParams }: { searchParams: Promise<SearchParams> }) {
@@ -39,13 +44,14 @@ export default async function BrowsePage({ searchParams }: { searchParams: Promi
 
   // Filter profiles
   const filtered = profiles.filter((p) => {
+    const tags = normalizeTags(p.tags);
     const matchesDorm = !selectedDorm || p.dorm === selectedDorm;
     const matchesVibe = !selectedVibe || p.vibe === selectedVibe;
     const matchesSearch =
       !searchQuery ||
       p.fullName.toLowerCase().includes(searchQuery) ||
       p.bio?.toLowerCase().includes(searchQuery) ||
-      p.tags.some((t) => t.toLowerCase().includes(searchQuery));
+      tags.some((t) => t.toLowerCase().includes(searchQuery));
 
     return matchesDorm && matchesVibe && matchesSearch;
   });
@@ -105,9 +111,11 @@ export default async function BrowsePage({ searchParams }: { searchParams: Promi
       <section className="panel">
         {filtered.length ? (
           <div className="grid">
-            {filtered.map((profile) => (
-              <Link href={`/profile/${profile.id}`} key={profile.id}>
-                <article className="roommate-card browse-card">
+            {filtered.map((profile) => {
+              const tags = normalizeTags(profile.tags);
+              return (
+                <Link href={`/profile/${profile.id}`} key={profile.id}>
+                  <article className="roommate-card browse-card">
                   <div className="card-head">
                     <div>
                       <h3>{profile.fullName}</h3>
@@ -121,17 +129,18 @@ export default async function BrowsePage({ searchParams }: { searchParams: Promi
                   </div>
                   <p>{profile.bio ?? 'No bio yet.'}</p>
                   <div className="tag-row">
-                    {profile.tags.slice(0, 3).map((tag) => (
+                    {tags.slice(0, 3).map((tag) => (
                       <span className="tag" key={tag}>
                         {tag}
                       </span>
                     ))}
-                    {profile.tags.length > 3 && <span className="tag muted">+{profile.tags.length - 3}</span>}
+                    {tags.length > 3 && <span className="tag muted">+{tags.length - 3}</span>}
                   </div>
                   <p className="muted">{profile.reviewCount} reviews</p>
-                </article>
-              </Link>
-            ))}
+                  </article>
+                </Link>
+              );
+            })}
           </div>
         ) : (
           <div className="empty">No profiles match your filters. Try adjusting your search.</div>

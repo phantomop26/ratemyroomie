@@ -6,6 +6,11 @@ function stars(value: number) {
   return '★★★★★'.slice(0, value) + '☆☆☆☆☆'.slice(0, 5 - value);
 }
 
+function normalizeTags(tags: unknown): string[] {
+  if (!Array.isArray(tags)) return [];
+  return tags.filter((tag): tag is string => typeof tag === 'string');
+}
+
 export default async function HomePage() {
   const [user, data] = await Promise.all([getSessionUser(), getHomepageData()]);
 
@@ -122,7 +127,9 @@ export default async function HomePage() {
 
         <div className="grid">
           {data.profiles.length ? (
-            data.profiles.map((profile) => (
+            data.profiles.map((profile) => {
+              const tags = normalizeTags(profile.tags);
+              return (
               <Link href={`/profile/${profile.id}`} key={profile.id}>
                 <article className="roommate-card browse-card">
                   <div className="card-head">
@@ -138,17 +145,18 @@ export default async function HomePage() {
                   </div>
                   <p>{profile.bio ?? 'No bio yet, just a live profile.'}</p>
                   <div className="tag-row">
-                    {profile.tags.slice(0, 3).map((tag) => (
+                    {tags.slice(0, 3).map((tag) => (
                       <span className="tag" key={tag}>
                         {tag}
                       </span>
                     ))}
-                    {profile.tags.length > 3 && <span className="tag muted">+{profile.tags.length - 3}</span>}
+                    {tags.length > 3 && <span className="tag muted">+{tags.length - 3}</span>}
                   </div>
                   <p className="muted">{profile.reviewCount} reviews</p>
                 </article>
               </Link>
-            ))
+              );
+            })
           ) : (
             <div className="empty">No roommate profiles yet. Be the first NYU student to publish one.</div>
           )}

@@ -1,10 +1,16 @@
 import Link from 'next/link';
-import { cookies } from 'next/headers';
 
-export default function VerifyPage({ searchParams }: { searchParams?: Record<string, string> }) {
-  const email = searchParams?.email ?? '';
-  const devCode = searchParams?.devCode ?? '';
-  const error = searchParams?.error ?? '';
+type VerifySearchParams = {
+  email?: string;
+  devCode?: string;
+  error?: string;
+};
+
+export default async function VerifyPage({ searchParams }: { searchParams?: Promise<VerifySearchParams> }) {
+  const params = searchParams ? await searchParams : undefined;
+  const email = params?.email ?? '';
+  const devCode = params?.devCode ?? '';
+  const error = params?.error ?? '';
 
   return (
     <main className="shell">

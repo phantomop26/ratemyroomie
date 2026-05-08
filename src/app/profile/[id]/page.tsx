@@ -7,6 +7,11 @@ function stars(value: number) {
   return '★★★★★'.slice(0, value) + '☆☆☆☆☆'.slice(0, 5 - value);
 }
 
+function normalizeTags(tags: unknown): string[] {
+  if (!Array.isArray(tags)) return [];
+  return tags.filter((tag): tag is string => typeof tag === 'string');
+}
+
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id: profileId } = await params;
 
@@ -30,6 +35,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
   }
 
   const sessionUser = await getSessionUser();
+  const tags = normalizeTags(profile.tags);
 
   return (
     <main className="shell">
@@ -45,7 +51,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
             </p>
             <p>{profile.bio}</p>
             <div className="tag-row" style={{ marginTop: '1rem' }}>
-              {profile.tags.map((tag) => (
+              {tags.map((tag) => (
                 <span className="tag" key={tag}>
                   {tag}
                 </span>
