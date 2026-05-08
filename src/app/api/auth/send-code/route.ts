@@ -12,9 +12,25 @@ async function sendEmail(to: string, subject: string, text: string) {
     return;
   }
 
-  // Minimal nodemailer usage if SMTP_URL present
+  // Parse SMTP_URL via WHATWG URL so usernames like user%40domain.com work reliably.
+  const parsed = new URL(smtpUrl);
+  const secure = parsed.protocol === 'smtps:' || parsed.searchParams.get('secure') === 'true';
+  const port = parsed.port ? Number(parsed.port) : secure ? 465 : 587;
+
+  if (!parsed.hostname || !parsed.username || !parsed.password) {
+    throw new Error('Invalid SMTP_URL. Expected format: smtp://USER:PASS@HOST:PORT');
+  }
+
   const nodemailer = await import('nodemailer');
-  const transporter = nodemailer.createTransport(smtpUrl);
+  const transporter = nodemailer.createTransport({
+    host: parsed.hostname,
+    port,
+    secure,
+    auth: {
+      user: decodeURIComponent(parsed.username),
+      pass: decodeURIComponent(parsed.password),
+    },
+  });
   await transporter.sendMail({ from: process.env.EMAIL_FROM || 'no-reply@ratemyroommate.nyu', to, subject, text });
 }
 
