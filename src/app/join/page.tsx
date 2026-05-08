@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getHalls } from '@/lib/halls';
+import { DEFAULT_HALLS } from '@/lib/halls';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -30,7 +30,7 @@ function getJoinErrorMessage(error?: string, smtpMessage?: string) {
 export default async function JoinPage({ searchParams }: { searchParams?: Promise<JoinSearchParams> }) {
   const params = searchParams ? await searchParams : undefined;
   const errorMessage = getJoinErrorMessage(params?.error, params?.smtpMessage);
-  const halls = await getHalls();
+  const halls = DEFAULT_HALLS;
 
   return (
     <main className="shell">

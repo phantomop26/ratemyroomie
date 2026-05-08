@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { DEFAULT_HALLS } from '@/lib/halls';
 
 interface Profile {
   id: string;
@@ -38,7 +39,7 @@ export default function PostReviewPage() {
     async function loadHalls() {
       const res = await fetch('/api/halls', { cache: 'no-store' });
       const data = await res.json();
-      setHalls(data);
+      setHalls(Array.isArray(data) && data.length ? data : DEFAULT_HALLS);
     }
     loadHalls();
   }, []);

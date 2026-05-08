@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSessionUser } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { getHalls } from '@/lib/halls';
+import { DEFAULT_HALLS } from '@/lib/halls';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -27,7 +27,7 @@ export default async function DashboardPage() {
         profile: { select: { fullName: true, dorm: true } },
       },
     }),
-    getHalls(),
+    Promise.resolve(DEFAULT_HALLS),
   ]);
 
   return (

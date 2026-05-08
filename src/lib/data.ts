@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/db';
-import { getHalls } from '@/lib/halls';
+import { DEFAULT_HALLS } from '@/lib/halls';
 
 export const getHomepageData = async () => {
   const [profiles, reviews] = await Promise.all([
@@ -35,7 +35,7 @@ export const getHomepageData = async () => {
     }),
   ]);
 
-  const halls = await getHalls();
+  const halls = DEFAULT_HALLS;
 
   return { profiles, reviews, halls };
 };

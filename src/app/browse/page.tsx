@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
-import { getHalls } from '@/lib/halls';
+import { DEFAULT_HALLS } from '@/lib/halls';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -43,7 +43,7 @@ export default async function BrowsePage({ searchParams }: { searchParams: Promi
       },
       orderBy: [{ averageRating: 'desc' }, { reviewCount: 'desc' }],
     }),
-    getHalls(),
+    Promise.resolve(DEFAULT_HALLS),
   ]);
 
   // Filter profiles
